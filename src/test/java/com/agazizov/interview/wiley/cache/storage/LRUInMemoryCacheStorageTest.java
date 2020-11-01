@@ -21,21 +21,15 @@ class LRUInMemoryCacheStorageTest {
         final int maxSize = 3;
         LRUInMemoryCacheStorage<Integer, Integer> storage = new LRUInMemoryCacheStorage<>(maxSize);
         IntStream.range(0, 3).forEach(i -> storage.put(i, i));
-
         Assertions.assertEquals(3, storage.size());
+
+
         storage.get(1); // call 1 to up it
 
         storage.put(5, 5); // after this, key '0' should be removed
-
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(maxSize, storage.size()),
-                () -> Assertions.assertEquals(Set.of(1, 2, 5), storage.keySet())
-        );
+        Assertions.assertEquals(Set.of(1, 2, 5), storage.keySet());
 
         storage.put(6, 6); // after this, key '2' should be removed
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(maxSize, storage.size()),
-                () -> Assertions.assertEquals(Set.of(1, 5, 6), storage.keySet())
-        );
+        Assertions.assertEquals(Set.of(1, 5, 6), storage.keySet());
     }
 }

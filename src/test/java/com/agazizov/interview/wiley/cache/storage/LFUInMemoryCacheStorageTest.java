@@ -121,30 +121,17 @@ class LFUInMemoryCacheStorageTest {
         Assertions.assertEquals(maxSize, storage.size());
 
         // Call get with frequency
-        storage.get(1);
-        storage.get(1);
-        storage.get(1);
-        storage.get(1);
-        storage.get(3);
-        storage.get(3);
-        storage.get(3);
-        storage.get(0);
-        storage.get(0);
+        storage.get(1); storage.get(1); storage.get(1); storage.get(1);
+        storage.get(3); storage.get(3); storage.get(3);
+        storage.get(0); storage.get(0);
         storage.get(4);
         storage.get(2);
 
         storage.put(5, 5); // after this key '4' should be removed
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(maxSize, storage.size()),
-                () -> Assertions.assertEquals(Set.of(0, 1, 2, 3, 5), storage.keySet())
-        );
-        storage.get(5);
-        storage.get(5);  // call '5' to increase his frequency
+        Assertions.assertEquals(Set.of(0, 1, 2, 3, 5), storage.keySet());
 
+        storage.get(5); storage.get(5);  // call '5' to increase his frequency
         storage.put(6, 6); // after this key '2' should be removed
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(maxSize, storage.size()),
-                () -> Assertions.assertEquals(Set.of(0, 1, 3, 5, 6), storage.keySet())
-        );
+        Assertions.assertEquals(Set.of(0, 1, 3, 5, 6), storage.keySet());
     }
 }
