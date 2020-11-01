@@ -1,3 +1,4 @@
+import com.agazizov.interview.wiley.cache.Cache;
 import com.agazizov.interview.wiley.cache.CacheBuilder;
 import com.agazizov.interview.wiley.cache.LoadingCache;
 
@@ -5,7 +6,7 @@ import com.agazizov.interview.wiley.cache.LoadingCache;
  * Example usage of cache
  */
 public class ExampleUsage {
-    public static void main(String[] args) {
+    public static void example1() {
         LoadingCache<Integer, Integer> cache = CacheBuilder.<Integer, Integer>builder()
                 .maxSize(3)
                 .lru()
@@ -24,5 +25,29 @@ public class ExampleUsage {
 
         System.out.println(cache.size()); // prints 3
         System.out.println(cache.containsKey(2)); // prints false
+    }
+
+    public static void example2() {
+        Cache<Integer, Integer> cache = CacheBuilder.<Integer, Integer>builder()
+                .maxSize(3)
+                .lru()
+                .build();
+        cache.put(1, 10);
+        cache.getIfPresent(1).ifPresent(System.out::println); // prints 10
+    }
+
+    public static void example3() {
+        Cache<Integer, String> cache = CacheBuilder.<Integer, String>builder()
+                .maxSize(3)
+                .lfu()
+                .build();
+        cache.get(1, String::valueOf);
+        cache.getIfPresent(1).ifPresent(System.out::println); // prints string '1'
+    }
+
+    public static void main(String[] args) {
+        example1();
+        example2();
+        example3();
     }
 }
