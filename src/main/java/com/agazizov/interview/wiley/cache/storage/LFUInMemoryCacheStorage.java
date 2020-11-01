@@ -13,6 +13,9 @@ public final class LFUInMemoryCacheStorage<K, V> implements CacheStorage<K, V> {
 
     @SuppressWarnings("unchecked")
     public LFUInMemoryCacheStorage(int maxSize) {
+        if (maxSize <= 0) {
+            throw new IllegalArgumentException("Max size should be positive");
+        }
         this.cache = new HashMap<>(maxSize);
         this.frequencyList = new LinkedHashSet[maxSize];
         this.lowestFrequency = 0;
