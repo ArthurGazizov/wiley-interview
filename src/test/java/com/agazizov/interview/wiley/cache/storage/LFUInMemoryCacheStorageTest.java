@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.IntStream;
 
 class LFUInMemoryCacheStorageTest {
 
@@ -100,5 +102,49 @@ class LFUInMemoryCacheStorageTest {
         Assertions.assertFalse(storage.containsValue(2));
         storage.put(1, 2);
         Assertions.assertTrue(storage.containsValue(2));
+    }
+
+    @Test
+    void testMaxSize() {
+        final int maxSize = 10;
+        LFUInMemoryCacheStorage<Integer, Integer> storage = new LFUInMemoryCacheStorage<>(maxSize);
+        ThreadLocalRandom.current().ints().limit(1000).forEach(i -> storage.put(i, i));
+        Assertions.assertTrue(storage.size() <= maxSize);
+    }
+
+    @Test
+    void testEvict() {
+        final int maxSize = 5;
+        LFUInMemoryCacheStorage<Integer, Integer> storage = new LFUInMemoryCacheStorage<>(maxSize);
+        IntStream.range(0, maxSize).forEach(i -> storage.put(i, i));
+
+        Assertions.assertEquals(maxSize, storage.size());
+
+        // Call get with frequency
+        storage.get(1);
+        storage.get(1);
+        storage.get(1);
+        storage.get(1);
+        storage.get(3);
+        storage.get(3);
+        storage.get(3);
+        storage.get(0);
+        storage.get(0);
+        storage.get(4);
+        storage.get(2);
+
+        storage.put(5, 5); // after this key '4' should be removed
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(maxSize, storage.size()),
+                () -> Assertions.assertEquals(Set.of(0, 1, 2, 3, 5), storage.keySet())
+        );
+        storage.get(5);
+        storage.get(5);  // call '5' to increase his frequency
+
+        storage.put(6, 6); // after this key '2' should be removed
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(maxSize, storage.size()),
+                () -> Assertions.assertEquals(Set.of(0, 1, 3, 5, 6), storage.keySet())
+        );
     }
 }
