@@ -7,7 +7,7 @@ import java.util.Objects;
 class SimpleCacheImpl<K, V> extends AbstractCache<K, V> {
     private final CacheStorage<K, V> storage;
 
-    public SimpleCacheImpl(CacheStorage<K, V> storage) {
+    SimpleCacheImpl(CacheStorage<K, V> storage) {
         super();
         this.storage = Objects.requireNonNull(storage);
     }

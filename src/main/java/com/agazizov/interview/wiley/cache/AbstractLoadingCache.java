@@ -9,7 +9,7 @@ import java.util.stream.StreamSupport;
 abstract class AbstractLoadingCache<K, V> extends AbstractCache<K, V> implements LoadingCache<K, V> {
     private final Function<? super K, ? extends V> loader;
 
-    public AbstractLoadingCache(Function<? super K, ? extends V> loader) {
+    AbstractLoadingCache(Function<? super K, ? extends V> loader) {
         this.loader = Objects.requireNonNull(loader);
     }
 
