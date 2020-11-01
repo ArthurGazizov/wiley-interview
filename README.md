@@ -51,7 +51,7 @@ public class ExampleUsage {
 *   With `Cache<K, V>` you can persist key value pair in cache
 *   `LoadingCache<K,V>` gives a more convenient way to  load or compute a value associated with a key
 *   Interface `Storage<K, V>` represents an abstraction of storage
-*   Only in-memory repository is currently implemented with 2 different policies: LRU and LFU
+*   Only in-memory repository is currently implemented with 2 different eviction policies: LRU and LFU
 *   LRU implementation based on `LinkedHashMap` with `accessOrder = true` flag. I chose it to solve the problem easier and avoid mistakes
 *   LFU implementation based on http://dhruvbird.com/lfu.pdf
 *   Cache doesn't work with nulls in keys or in values to make it clearer and avoid unnecessary mistakes
